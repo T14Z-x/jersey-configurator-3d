@@ -15,6 +15,9 @@ export const ColorPickerRow: React.FC<ColorPickerRowProps> = ({
   compact = false,
 }) => {
   const swatches = compact ? ATHLETIC_SWATCHES.slice(0, 12) : ATHLETIC_SWATCHES;
+  const swatchName = ATHLETIC_SWATCHES.find(
+    (s) => s.hex.toLowerCase() === value.toLowerCase()
+  )?.name;
 
   return (
     <div className="space-y-2">
@@ -27,8 +30,8 @@ export const ColorPickerRow: React.FC<ColorPickerRowProps> = ({
             className="w-3.5 h-3.5 rounded-sm border border-white/20"
             style={{ backgroundColor: value }}
           />
-          <span className="text-[11px] font-mono text-zinc-300 uppercase">
-            {value}
+          <span className="text-[11px] text-zinc-300">
+            {swatchName ?? <span className="font-mono uppercase">{value}</span>}
           </span>
           <input
             type="color"

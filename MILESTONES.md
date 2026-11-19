@@ -12,9 +12,9 @@ Legend: ✅ done · 🔲 planned
 - ✅ Move front number up so it no longer sits too low on the chest
 
 ## Milestone 2 — UI/UX Redesign
-- 🔲 Step-by-step wizard flow (Style → Colour → Design → Text → Logos → Review)
-- 🔲 Sticky bottom bar with live price and "Get Quote" CTA
-- 🔲 Named colour swatches with labels and recently-used colours
+- ✅ Step-by-step wizard (progress bar, Back/Next buttons, "Get Quote" on the last step)
+- ✅ Sticky footer with live per-jersey price and CTA
+- ✅ Named colour labels (recently-used colours still open)
 - 🔲 Pattern thumbnails rendered from the real 3D model
 - 🔲 Mobile bottom-sheet editor with swipe gestures
 - 🔲 First-visit onboarding tooltips

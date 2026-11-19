@@ -234,6 +234,11 @@ export function App() {
   };
 
   const sportMeta = SPORTS.find((s) => s.id === config.sport) ?? SPORTS[0];
+  const stepIndex = NAV_TABS.findIndex((t) => t.id === activeTab);
+  const goStep = (delta: number) => {
+    const next = NAV_TABS[Math.min(NAV_TABS.length - 1, Math.max(0, stepIndex + delta))];
+    setActiveTab(next.id);
+  };
 
   const cycleBackdrop = () => {
     setBackdrop((prev) =>
@@ -371,12 +376,22 @@ export function App() {
         </nav>
 
         {/* CUSTOMIZATION SIDEBAR */}
-        <aside className="order-3 md:order-2 w-full md:w-80 h-60 md:h-auto shrink-0 border-t md:border-t-0 md:border-r border-zinc-800/90 bg-zinc-950/95 flex flex-col min-h-0 z-10">
-          <div className="px-4 py-3 border-b border-zinc-800/80 flex items-center justify-between">
-            <h2 className="text-xs font-extrabold uppercase tracking-widest text-zinc-200">
-              {NAV_TABS.find((t) => t.id === activeTab)?.label} Studio
-            </h2>
-            <span className="text-[10px] font-mono text-zinc-500">LIVE 3D</span>
+        <aside className="order-3 md:order-2 w-full md:w-80 h-72 md:h-auto shrink-0 border-t md:border-t-0 md:border-r border-zinc-800/90 bg-zinc-950/95 flex flex-col min-h-0 z-10">
+          <div className="px-4 pt-3 pb-2.5 border-b border-zinc-800/80 space-y-2">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-extrabold uppercase tracking-widest text-zinc-200">
+                {NAV_TABS.find((t) => t.id === activeTab)?.label}
+              </h2>
+              <span className="text-[10px] font-mono text-zinc-500">
+                STEP {stepIndex + 1} / {NAV_TABS.length}
+              </span>
+            </div>
+            <div className="h-1 rounded-full bg-zinc-800 overflow-hidden">
+              <div
+                className="h-full bg-rose-500 transition-all duration-300"
+                style={{ width: `${((stepIndex + 1) / NAV_TABS.length) * 100}%` }}
+              />
+            </div>
           </div>
           <div className="flex-1 min-h-0">
             <EditorPanel
@@ -390,6 +405,34 @@ export function App() {
               onFocusBack={() => handleCameraPreset('back')}
               onFocusFront={() => handleCameraPreset('front')}
             />
+          </div>
+          <div className="px-3 py-2.5 border-t border-zinc-800/90 bg-zinc-950 flex items-center gap-2">
+            <button
+              onClick={() => goStep(-1)}
+              disabled={stepIndex === 0}
+              className="px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-200 hover:border-zinc-600 disabled:opacity-30 transition"
+            >
+              ← Back
+            </button>
+            <div className="flex-1 text-center leading-tight">
+              <div className="text-[10px] uppercase tracking-wider text-zinc-500">Per jersey</div>
+              <div className="text-sm font-bold text-emerald-400">${calcUnitPrice(config)}</div>
+            </div>
+            {stepIndex < NAV_TABS.length - 1 ? (
+              <button
+                onClick={() => goStep(1)}
+                className="px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white transition"
+              >
+                Next: {NAV_TABS[stepIndex + 1].label} →
+              </button>
+            ) : (
+              <button
+                onClick={handleOpenQuote}
+                className="px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white transition"
+              >
+                Get Quote
+              </button>
+            )}
           </div>
         </aside>
 
