@@ -23,11 +23,11 @@ interface JerseyStageProps {
 }
 
 const CAMERA_PRESETS: Record<CameraPreset, [number, number, number]> = {
-  front: [0, 0.08, 2.75],
-  back: [0, 0.08, -2.75],
-  left: [-2.65, 0.08, 0.25],
-  right: [2.65, 0.08, 0.25],
-  'three-quarter': [1.65, 0.22, 2.25],
+  front: [0, 0.02, 3.25],
+  back: [0, 0.02, -3.25],
+  left: [-3.15, 0.02, 0.25],
+  right: [3.15, 0.02, 0.25],
+  'three-quarter': [1.85, 0.18, 2.75],
 };
 
 export const JerseyStage = React.forwardRef<JerseyStageHandle, JerseyStageProps>(

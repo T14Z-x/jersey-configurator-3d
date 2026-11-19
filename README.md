@@ -2,6 +2,14 @@
 
 An interactive **3D WebGL Custom Sportswear & Jersey Configurator** built with **React, TypeScript, Three.js, and Tailwind CSS**. Design custom team jerseys in real time with procedural 3D garment geometry, live 2048×1024 sublimation textures, custom typography, logo placement, shareable design URLs, and a team roster & quote workflow.
 
+![DYO Studio — Baseball Maroon Pinstripe 3D Configurator](./docs/screenshots/baseball-maroon.png)
+
+## Screenshots
+
+| Basketball Sleeveless Singlet | Soccer V-Chevron Kit with Crest |
+| :---: | :---: |
+| ![Basketball Navy & Gold](./docs/screenshots/basketball-navy.png) | ![Soccer Black & Crimson](./docs/screenshots/soccer-crimson.png) |
+
 ## Features
 
 - **Real-Time 3D WebGL Viewport**
