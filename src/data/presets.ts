@@ -346,3 +346,17 @@ export function findColorSlug(hex: string): string {
   const match = ATHLETIC_SWATCHES.find((s) => s.hex.toLowerCase() === lower);
   return match ? match.slug : lower.replace('#', '');
 }
+
+/** Unit price that reflects the chosen sport, fabric, sleeve and logos. */
+export function calcUnitPrice(config: JerseyConfig): number {
+  const base = SPORTS.find((s) => s.id === config.sport)?.basePrice ?? 50;
+  const fabricExtra: Record<FabricType, number> = {
+    'pro-mesh': 0,
+    'micro-interlock': 2,
+    pique: 3,
+    'matte-poly': 1,
+  };
+  const sleeveExtra = config.sleeve === 'long' ? 4 : config.sleeve === 'raglan' ? 2 : 0;
+  const logoExtra = config.logos.length * 2;
+  return base + fabricExtra[config.fabric] + sleeveExtra + logoExtra;
+}

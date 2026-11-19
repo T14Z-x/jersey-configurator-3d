@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { CheckCircle2, Download, Plus, Trash2, Users, X } from 'lucide-react';
-import { SPORTS } from '../data/presets';
+import { SPORTS, calcUnitPrice } from '../data/presets';
 import { CutId, JerseyConfig, RosterEntry } from '../types/jersey';
 
 interface RosterQuoteModalProps {
@@ -56,10 +56,10 @@ export const RosterQuoteModal: React.FC<RosterQuoteModalProps> = ({
     else if (totalQty >= 25) discount = 0.2;
     else if (totalQty >= 10) discount = 0.1;
 
-    const unitPrice = +(sportMeta.basePrice * (1 - discount)).toFixed(2);
+    const unitPrice = +(calcUnitPrice(config) * (1 - discount)).toFixed(2);
     const subtotal = +(unitPrice * totalQty).toFixed(2);
     return { totalQty, discount, unitPrice, subtotal };
-  }, [roster, sportMeta.basePrice]);
+  }, [roster, config]);
 
   if (!open) return null;
 

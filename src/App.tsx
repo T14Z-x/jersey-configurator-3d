@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Bookmark,
   Camera,
@@ -23,8 +23,29 @@ import {
 } from 'lucide-react';
 import { EditorPanel } from './components/EditorPanel';
 import { RosterQuoteModal } from './components/RosterQuoteModal';
-import { DEFAULT_JERSEY_CONFIG, SPORTS } from './data/presets';
-import { JerseyStage, JerseyStageHandle } from './three/JerseyStage';
+import { DEFAULT_JERSEY_CONFIG, SPORTS, calcUnitPrice } from './data/presets';
+import type { JerseyStageHandle } from './three/JerseyStage';
+
+// Lazy-load the heavy Three.js stage so the UI shell paints immediately.
+const JerseyStage = lazy(() =>
+  import('./three/JerseyStage').then((m) => ({ default: m.JerseyStage }))
+);
+
+function hasWebGL(): boolean {
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+const StageLoader: React.FC = () => (
+  <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-zinc-950">
+    <div className="w-10 h-10 rounded-full border-2 border-zinc-700 border-t-rose-500 animate-spin" />
+    <span className="text-xs text-zinc-400 tracking-wide">Loading 3D studio…</span>
+  </div>
+);
 import {
   BackdropMode,
   CameraPreset,
@@ -60,6 +81,7 @@ export function App() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteSnapshot, setQuoteSnapshot] = useState('');
   const [toast, setToast] = useState<string | null>(null);
+  const [webglOk] = useState<boolean>(() => hasWebGL());
 
   const [savedDesigns, setSavedDesigns] = useState<SavedDesign[]>(() => {
     try {
@@ -230,7 +252,7 @@ export function App() {
             <span className="capitalize text-zinc-400">{config.cut}&apos;s</span>
             <span className="text-zinc-600">/</span>
             <span className="text-emerald-400 font-mono font-semibold">
-              ${sportMeta.basePrice}
+              ${calcUnitPrice(config)}
             </span>
           </div>
         </div>
@@ -304,9 +326,9 @@ export function App() {
       </header>
 
       {/* MAIN STUDIO WORKSPACE */}
-      <div className="flex-1 flex min-h-0 relative">
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 relative">
         {/* LEFT STEP RAIL */}
-        <nav className="w-16 shrink-0 border-r border-zinc-800/90 bg-zinc-950 flex flex-col items-center py-3 gap-1.5 z-10">
+        <nav className="order-2 md:order-1 w-full md:w-16 shrink-0 border-t md:border-t-0 md:border-r border-zinc-800/90 bg-zinc-950 flex flex-row md:flex-col items-center justify-around md:justify-start py-2 md:py-3 gap-1.5 z-10">
           {NAV_TABS.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -330,7 +352,7 @@ export function App() {
         </nav>
 
         {/* CUSTOMIZATION SIDEBAR */}
-        <aside className="w-72 sm:w-80 shrink-0 border-r border-zinc-800/90 bg-zinc-950/95 flex flex-col min-h-0 z-10">
+        <aside className="order-3 md:order-2 w-full md:w-80 h-60 md:h-auto shrink-0 border-t md:border-t-0 md:border-r border-zinc-800/90 bg-zinc-950/95 flex flex-col min-h-0 z-10">
           <div className="px-4 py-3 border-b border-zinc-800/80 flex items-center justify-between">
             <h2 className="text-xs font-extrabold uppercase tracking-widest text-zinc-200">
               {NAV_TABS.find((t) => t.id === activeTab)?.label} Studio
@@ -353,13 +375,22 @@ export function App() {
         </aside>
 
         {/* CENTER 3D INTERACTIVE STAGE */}
-        <main className="flex-1 relative min-w-0 min-h-0">
-          <JerseyStage
-            ref={stageRef}
-            config={config}
-            autoRotate={autoRotate}
-            backdrop={backdrop}
-          />
+        <main className="order-1 md:order-3 flex-1 relative min-w-0 min-h-[260px] md:min-h-0">
+          {webglOk ? (
+            <Suspense fallback={<StageLoader />}>
+              <JerseyStage
+                ref={stageRef}
+                config={config}
+                autoRotate={autoRotate}
+                backdrop={backdrop}
+              />
+            </Suspense>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center p-6 text-center text-sm text-zinc-300">
+              WebGL isn&apos;t available in this browser. Please enable hardware acceleration or
+              try a recent version of Chrome, Edge, Firefox, or Safari.
+            </div>
+          )}
 
           {/* Top-right Viewport Utility Controls */}
           <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">

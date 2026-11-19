@@ -440,7 +440,7 @@ export async function renderTorsoCanvas(
     const fn = config.frontNumber;
     const isLeftChest = fn.placement === 'left-chest';
     const cx = isLeftChest ? halfW * 0.67 : halfW * 0.5;
-    const cy = isLeftChest ? H * 0.53 : H * 0.56;
+    const cy = isLeftChest ? H * 0.46 : H * 0.52;
     drawStyledText(
       ctx,
       fn.text,

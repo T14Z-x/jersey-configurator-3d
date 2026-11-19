@@ -408,16 +408,21 @@ export const JerseyStage = React.forwardRef<JerseyStageHandle, JerseyStageProps>
         }
       };
 
-      // Also re-render once web fonts finish loading
-      updateTextures();
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(() => {
-          if (!cancelled) updateTextures();
-        });
-      }
+      // Debounce heavy canvas redraws so sliders / color pickers stay smooth.
+      // Also re-render once web fonts finish loading.
+      const timer = window.setTimeout(() => {
+        if (cancelled) return;
+        updateTextures();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => {
+            if (!cancelled) updateTextures();
+          });
+        }
+      }, 80);
 
       return () => {
         cancelled = true;
+        window.clearTimeout(timer);
       };
     }, [config]);
 
