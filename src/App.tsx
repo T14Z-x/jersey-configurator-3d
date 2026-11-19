@@ -35,7 +35,7 @@ import {
 import { downloadDataUrl, openPrintableSpecSheet } from './utils/specSheet';
 import { buildDesignHash, parseDesignHash } from './utils/urlState';
 
-const STORAGE_KEY = 'dyo_studio_saved_designs_v1';
+const STORAGE_KEY = 't14z_studio_saved_designs_v1';
 
 const NAV_TABS: { id: EditorTab; label: string; icon: React.FC<{ className?: string }> }[] = [
   { id: 'sport', label: 'Sport', icon: Shirt },
@@ -79,7 +79,7 @@ export function App() {
     }, 2400);
   }, []);
 
-  // Sync URL hash like dyo.blksport.com/#/sport/baseball/cut/men/color/maroon/<hash>
+  // Sync URL hash as #/sport/baseball/cut/men/color/maroon/<hash>
   useEffect(() => {
     const nextHash = buildDesignHash(config);
     if (window.location.hash !== nextHash) {
@@ -141,7 +141,7 @@ export function App() {
     if (!dataUrl) return;
     downloadDataUrl(
       dataUrl,
-      `dyo-${config.sport}-${(config.teamName.text || 'jersey').toLowerCase()}.png`
+      `t14z-${config.sport}-${(config.teamName.text || 'jersey').toLowerCase()}.png`
     );
     showToast('High-res 3D PNG downloaded!');
   };
@@ -210,12 +210,12 @@ export function App() {
       <header className="h-14 shrink-0 border-b border-zinc-800/90 bg-zinc-950/95 px-4 flex items-center justify-between gap-3 z-20">
         <div className="flex items-center gap-3 min-w-0">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-600 to-rose-900 flex items-center justify-center font-black text-white text-xs tracking-tighter shadow-md shadow-rose-950">
-              DYO
+            <div className="w-9 h-8 rounded-lg bg-gradient-to-br from-rose-600 to-rose-900 flex items-center justify-center font-black text-white text-[11px] tracking-tighter shadow-md shadow-rose-950">
+              T14Z
             </div>
             <div className="leading-tight hidden sm:block">
               <div className="text-sm font-extrabold tracking-wide text-white">
-                DYO STUDIO
+                T14Z STUDIO
               </div>
               <div className="text-[10px] uppercase tracking-widest text-zinc-400">
                 3D Uniform Configurator

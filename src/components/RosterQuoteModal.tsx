@@ -129,7 +129,7 @@ export const RosterQuoteModal: React.FC<RosterQuoteModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const refId = `DYO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    const refId = `T14Z-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
     setSubmittedRef(refId);
   };
 

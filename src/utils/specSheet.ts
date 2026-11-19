@@ -27,7 +27,7 @@ export function openPrintableSpecSheet(
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>DYO Studio Production Spec Sheet — ${config.teamName.text || 'Custom Jersey'}</title>
+  <title>T14Z Studio Production Spec Sheet — ${config.teamName.text || 'Custom Jersey'}</title>
   <style>
     * { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, sans-serif; }
     body { margin: 0; padding: 32px; background: #f4f4f5; color: #18181b; }
@@ -53,7 +53,7 @@ export function openPrintableSpecSheet(
   <div class="sheet">
     <div class="header">
       <div>
-        <div class="title">DYO STUDIO — PRODUCTION SPEC SHEET</div>
+        <div class="title">T14Z STUDIO — PRODUCTION SPEC SHEET</div>
         <div style="font-size:13px;color:#71717a;margin-top:4px;">Generated ${new Date().toLocaleDateString()} • ${sportName} ${cutName} Custom Jersey</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">

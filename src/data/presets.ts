@@ -263,11 +263,11 @@ export const BUILTIN_LOGOS: { id: string; name: string; src: string }[] = [
     </svg>`),
   },
   {
-    id: 'dyo-badge',
-    name: 'DYO Pro Mark',
+    id: 't14z-badge',
+    name: 'T14Z Pro Mark',
     src: svgToDataUrl(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
       <rect x="10" y="28" width="100" height="64" rx="12" fill="#111317" stroke="#F8FAFC" stroke-width="5"/>
-      <text x="60" y="72" text-anchor="middle" font-family="Impact, sans-serif" font-size="38" fill="#F8FAFC" letter-spacing="3">DYO</text>
+      <text x="60" y="72" text-anchor="middle" font-family="Impact, sans-serif" font-size="34" fill="#F8FAFC" letter-spacing="2">T14Z</text>
     </svg>`),
   },
 ];
