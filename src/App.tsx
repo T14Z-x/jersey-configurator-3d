@@ -101,6 +101,25 @@ export function App() {
     }, 2400);
   }, []);
 
+  // Optional deep links: ?tab=colors&view=back&quote=1 (handy for sharing/QA)
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const tab = q.get('tab') as EditorTab | null;
+    if (tab && NAV_TABS.some((t) => t.id === tab)) setActiveTab(tab);
+    const view = q.get('view') as CameraPreset | null;
+    if (view && ['front', 'back', 'left', 'right', 'three-quarter'].includes(view)) {
+      const timer = window.setTimeout(() => {
+        setActiveView(view);
+        stageRef.current?.setCameraPreset(view, q.get('instant') === '1');
+      }, 1200);
+      if (q.get('quote') !== '1') return () => window.clearTimeout(timer);
+    }
+    if (q.get('quote') === '1') {
+      const t2 = window.setTimeout(() => setQuoteOpen(true), 1600);
+      return () => window.clearTimeout(t2);
+    }
+  }, []);
+
   // Sync URL hash as #/sport/baseball/cut/men/color/maroon/<hash>
   useEffect(() => {
     const nextHash = buildDesignHash(config);

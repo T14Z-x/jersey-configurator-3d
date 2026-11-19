@@ -10,7 +10,7 @@ import {
 } from './jerseyTexture';
 
 export interface JerseyStageHandle {
-  setCameraPreset: (preset: CameraPreset) => void;
+  setCameraPreset: (preset: CameraPreset, instant?: boolean) => void;
   zoomBy: (delta: number) => void;
   captureSnapshot: (width?: number, height?: number) => string;
   captureFrontAndBack: () => Promise<{ front: string; back: string }>;
@@ -249,10 +249,29 @@ export const JerseyStage = React.forwardRef<JerseyStageHandle, JerseyStageProps>
         rafId = requestAnimationFrame(animate);
         const dt = Math.min(clock.getDelta(), 0.05);
 
-        if (targetCamPosRef.current && cameraRef.current) {
-          cameraRef.current.position.lerp(targetCamPosRef.current, Math.min(1, dt * 7));
-          if (cameraRef.current.position.distanceTo(targetCamPosRef.current) < 0.015) {
-            cameraRef.current.position.copy(targetCamPosRef.current);
+        if (targetCamPosRef.current && cameraRef.current && controlsRef.current) {
+          // Orbit around the jersey (spherical interpolation) instead of a straight
+          // line so the camera never cuts through the garment.
+          const cam = cameraRef.current;
+          const tgt = controlsRef.current.target;
+          const cur = new THREE.Spherical().setFromVector3(cam.position.clone().sub(tgt));
+          const dst = new THREE.Spherical().setFromVector3(
+            targetCamPosRef.current.clone().sub(tgt)
+          );
+          let dTheta = dst.theta - cur.theta;
+          while (dTheta > Math.PI) dTheta -= Math.PI * 2;
+          while (dTheta < -Math.PI) dTheta += Math.PI * 2;
+          const k = Math.min(1, dt * 6);
+          cur.radius += (dst.radius - cur.radius) * k;
+          cur.phi += (dst.phi - cur.phi) * k;
+          cur.theta += dTheta * k;
+          cam.position.copy(tgt).add(new THREE.Vector3().setFromSpherical(cur));
+          if (
+            Math.abs(dTheta) < 0.004 &&
+            Math.abs(dst.phi - cur.phi) < 0.004 &&
+            Math.abs(dst.radius - cur.radius) < 0.01
+          ) {
+            cam.position.copy(targetCamPosRef.current);
             targetCamPosRef.current = null;
           }
         }
@@ -427,8 +446,14 @@ export const JerseyStage = React.forwardRef<JerseyStageHandle, JerseyStageProps>
     }, [config]);
 
     useImperativeHandle(ref, () => ({
-      setCameraPreset(preset: CameraPreset) {
-        targetCamPosRef.current = new THREE.Vector3(...CAMERA_PRESETS[preset]);
+      setCameraPreset(preset: CameraPreset, instant = false) {
+        const dest = new THREE.Vector3(...CAMERA_PRESETS[preset]);
+        if (instant && cameraRef.current) {
+          cameraRef.current.position.copy(dest);
+          targetCamPosRef.current = null;
+        } else {
+          targetCamPosRef.current = dest;
+        }
       },
       zoomBy(delta: number) {
         const cam = cameraRef.current;

@@ -284,7 +284,7 @@ function buildSleeveGeometry(
       const b = j * stride + (i + 1);
       const c = (j + 1) * stride + (i + 1);
       const d = (j + 1) * stride + i;
-      if (side === 1) {
+      if (side === -1) {
         indices.push(a, c, b);
         indices.push(a, d, c);
       } else {

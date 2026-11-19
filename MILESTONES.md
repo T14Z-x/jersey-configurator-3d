@@ -40,4 +40,5 @@ Legend: ✅ done · 🔲 planned
 - 🔲 Split `EditorPanel.tsx` (1100+ lines) into per-tab components
 - 🔲 Vitest unit tests (URL state, pricing, roster)
 - 🔲 CI (type-check + build) via GitHub Actions
-- 🔲 Visual QA of Back view, Women's/Youth cuts, Polo collar, and Roster modal
+- ✅ Visual QA of Back view, Women's/Youth cuts, Polo collar, Roster modal and mobile (screenshots in docs/qa, script in scripts/qa-shots.sh)
+- ✅ Fixed camera clipping through the jersey on view changes (orbit transitions) and the dark viewer-left sleeve (winding)
