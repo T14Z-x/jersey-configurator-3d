@@ -218,14 +218,14 @@ function buildSleeveGeometry(
   const segLen = 24;
   const segRad = 36;
 
-  const shoulderX = side * (p.shoulderW * 0.71);
-  const shoulderY = p.height * 0.305;
+  const shoulderX = side * (p.shoulderW * 0.76);
+  const shoulderY = p.height * 0.375;
   const baseRadiusY = (cut === 'women' ? 0.17 : 0.195) * p.sleeveScale;
   const baseRadiusZ = (cut === 'women' ? 0.16 : 0.18) * p.sleeveScale;
   const cuffRadius = (sleeveStyle === 'long' ? 0.095 : 0.145) * p.sleeveScale;
 
   // Natural downward sleeve angle (approx 36 degrees)
-  const angle = 0.62;
+  const angle = 0.5;
   const dirX = side * Math.cos(angle);
   const dirY = -Math.sin(angle);
 
